@@ -14,26 +14,11 @@ def register():
 	email = data.get('email')
 	password = data.get('password')
 	if email is None or email.find('@') == -1 or email.find('.') == -1:
-		return flask.jsonify(
-			{
-				'code': 4,
-				'message': 'Incorrect email'
-			}
-		)
+		return utils.error(4, 'Некорректный email')
 	if len(list(filter(lambda x: x['email'] == email, users))) != 0:
-		return flask.jsonify(
-			{
-				'code': 2,
-				'message': 'Пользователь уже есть в системе'
-			}
-		)
+		return utils.error(2, 'Пользователь с таким email уже зарегистрирован')
 	if password is None or len(password) < 6:
-		return flask.jsonify(
-			{
-				'code': 5,
-				'message': 'Incorrect password'
-			}
-		)
+		return utils.error(5, 'Пароль должен быть не менее 6 символов')
 	user = {
 		'full_name': full_name,
 		'email': email,
@@ -64,10 +49,7 @@ def login():
 					'message': 'User logged in!',
 					'access_token': access_token
 				})
-	return flask.jsonify({
-			'code': 6,
-			'message': 'Такого пользователя нет в системе'
-		})
+	return utils.error(6, 'Неверный email или пароль')
 
 
 @auth_api.route(config.API_ROUTE_PREFIX + 'user/me', methods=['GET'])
@@ -76,7 +58,10 @@ def get_user_info():
 	"""
 	Authorization: Bearer hV7g1pxCmWnJb3cY5KDY
 	"""
-	access_token = request.headers.get('Authorization').split()[1]
+	authorization_header = request.headers.get('Authorization')
+	if authorization_header is None:
+		return utils.error(7, 'Не передан заголовок Authorization')
+	access_token = authorization_header.split()[1]
 	for user in users:
 		if user['access_token'] == access_token:
 			return flask.jsonify({
@@ -84,7 +69,4 @@ def get_user_info():
 				'message': 'User found',
 				'user': user
 			})
-	return flask.jsonify({
-		'code': 7,
-		'message': 'У вас нет секретного ключа'
-	})
+	return utils.error(8, 'Некорректный токен авторизации')

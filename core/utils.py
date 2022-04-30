@@ -1,6 +1,7 @@
 import random
 import string
 import hashlib
+import json
 
 from core import config
 
@@ -16,3 +17,11 @@ def hash_password(password):
 
 def check_password(hashed_password, user_password):
 	return hashed_password == hash_password(user_password)
+
+
+def error(code: int, message: str) -> str:
+	return json.dumps({
+			'code': code,
+			'message': message
+		})
+
