@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User info</title>
+</head>
+<body>
+
+<div>
+    <div>
+        <a href="http://localhost:5000/login">Login</a>
+        <a href="http://localhost:5000/register">Register</a>
+    </div>
+    <br>
+    <button onclick="getMeInfo()">Get me</button>
+
+    <h1 id="full_name"></h1>
+    <h3 id="email"></h3>
+
+</div>
+
+<script>
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function getMeInfo() {
+        // get access token cookie
+        let accessToken = getCookie('access_token');
+        fetch('/api/user/me', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }).then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+              if (data.code === 0)
+              {
+                  document.getElementById('full_name').textContent = "Hello " + data.user.full_name;
+                  document.getElementById('email').textContent = data.user.email;
+              }
+              else
+              {
+                  alert(data.message);
+              }
+          });
+    }
+
+</script>
+
+</body>
+</html>

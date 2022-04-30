@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+<div>
+
+    <label for="full_name">Full name:</label>
+    <input type="text" id="full_name" name="full_name" placeholder="Full name">
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="vasya@gmail.com">
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="qwerty123">
+    <br>
+    <button onclick="sendRegisterRequest()">Register</button>
+
+</div>
+
+<script>
+
+    function sendRegisterRequest() {
+        let full_name = document.getElementById("full_name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                full_name: full_name,
+                email: email,
+                password: password
+            })
+        }).then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+              if (data.code === 0) {
+                 document.cookie = "access_token=" + data.user.access_token;
+                  alert("Successfully registered");
+              } else {
+                  alert("Registration failed");
+              }
+              console.log(document.cookie);
+          });
+    }
+
+</script>
+
+</body>
+</html>
