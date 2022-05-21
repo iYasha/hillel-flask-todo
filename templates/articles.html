@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+</head>
+<body>
+
+
+<div class="articles">
+    <div class="article">
+
+    </div>
+
+</div>
+
+
+<script>
+    function getArticles() {
+        fetch('/api/articles', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+              if (data.code === 0)
+              {
+                  // foreach article
+                  data.data.forEach(function(article) {
+                      // create article
+                      let articleElement = document.createElement('div');
+                      articleElement.classList.add('article');
+                      articleElement.innerHTML = `
+                            <img src="http://127.0.0.1:5000/api/files/${article.file_name}">
+                          <h2>${article.title}</h2>
+                          <p>${article.content}</p>
+                          <p>${article.author}</p>
+                      `;
+                      document.querySelector('.articles').appendChild(articleElement);
+                  });
+              }
+              else
+              {
+                  alert(data.message);
+              }
+          });
+    }
+
+    getArticles();
+</script>
+</body>
+</html>

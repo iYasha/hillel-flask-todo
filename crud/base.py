@@ -39,6 +39,8 @@ class BaseCRUD:
 			if data['id'] == obj_id:
 				data.update(new_data)
 				self.save()
+				return data
+		return None
 
 	def delete(self, obj_id: int) -> bool:
 		data = self.get_one(obj_id)

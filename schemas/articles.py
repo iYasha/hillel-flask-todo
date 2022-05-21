@@ -4,11 +4,12 @@ from datetime import datetime
 
 
 class Article(BaseModel):
-	id: uuid.UUID = uuid.uuid4()
+	id: str = str(uuid.uuid4())
 	title: str
 	content: str
 	author: str
-	created_at: datetime = datetime.now()
+	file_name: str
+	created_at: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 	@validator('title')
 	def check_title(cls, value):
