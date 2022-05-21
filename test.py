@@ -82,7 +82,75 @@ class User(BaseModel):
 		return value
 
 
-user_1 = User(name='Вася', age=20, email='vasya@gmail.com')
-print(user_1.dict())
+# user_1 = User(name='Вася', age=20, email='vasya@gmail.com')
+# print(user_1.dict())
+
+
+
+
+
+
+
+"""
+1. Создать сущность User с помощью PyDantic
+У пользователя есть следующие поля:
+id - заполняется автоматически (UUID)
+name - заполняется вручную, длина должна быть от 2 до 20 символов
+age - заполняется вручную, должен быть в диапазоне от 0 до 200
+email - заполняется вручную, нужно сделать проверку на то, что пользователь ввел корректный email
+created_at - заполняется автоматически (datetime.now())
+
+Создать обьект User с помощью словаря
+user_dict = {
+	'name': 'Вася',
+	'age': 20,
+	'email': 'test@gmail.com'
+}
+
+Обьект преобразовать в json и словарь и вывести пользователю
+"""
+
+
+user_dict = {
+	'name': 'Вася',
+	'age': 20,
+	'email': 'test@gmail.com'
+}
+
+# user = User(name=user_dict.get('name'), age=user_dict.get('age'), email=user_dict.get('email'))
+user = User(**user_dict)
+
+print(user.json())
+print(user.dict())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
